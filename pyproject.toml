@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pw11-curso"
+version = "0.1.0"
+description = ""
+authors = ["Glaymar A de França <glaymar2010@gmail.com>"]
+readme = "README.md"
+packages = [{include = "core"}]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.0.8"
+gunicorn = "^22.0.0"
+pillow = "^10.4.0"
+
+[tool.poetry.scripts]
+start = "manage:main"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
