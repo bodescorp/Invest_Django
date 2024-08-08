@@ -130,8 +130,3 @@ Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICEN
 ---
 
 Para mais informações, consulte a [documentação](docs/README.md) ou entre em contato com os mantenedores.
-
-```
-
-Essa versão do `README.md` inclui as seções solicitadas e ajusta a configuração e uso conforme solicitado.
-```
