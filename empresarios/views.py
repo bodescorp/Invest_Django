@@ -50,3 +50,11 @@ def cadastrar_empresa(request):
         
         messages.add_message(request, constants.SUCCESS, 'Empresa criada com sucesso')
         return redirect('/empresarios/cadastrar_empresa')
+    
+def listar_empresas(request):
+    if not request.user.is_authenticated:
+        return redirect('/usuarios/logar')
+    if request.method == "GET":
+        empresas = Empresas.objects.filter(user=request.user)
+        return render(request, 'listar_empresas.html', {'empresas': empresas})
+    
