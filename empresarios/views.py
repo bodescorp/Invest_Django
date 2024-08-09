@@ -57,4 +57,8 @@ def listar_empresas(request):
     if request.method == "GET":
         empresas = Empresas.objects.filter(user=request.user)
         return render(request, 'listar_empresas.html', {'empresas': empresas})
-    
+
+def empresa(request, id):
+    empresa = Empresas.objects.get(id=id)
+    if request.method == "GET":
+        return render(request, 'empresa.html', {'empresa': empresa})
