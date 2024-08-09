@@ -97,3 +97,14 @@ def add_doc(request, id):
     documento.save()
     messages.add_message(request, constants.SUCCESS, "Arquivo cadastrado com sucesso")
     return redirect(f'/empresarios/empresa/{empresa.id}')
+
+def excluir_dc(request, id):    
+    documento = Documento.objects.get(id=id)
+
+    if documento.empresa.user != request.user:
+        messages.add_message(request, constants.ERROR, "Esse documento não é seu")
+        return redirect(f'/empresarios/empresa/{documento.empresa.id}')
+
+    documento.delete()
+    messages.add_message(request, constants.SUCCESS, "Documento excluído com sucesso")
+    return redirect(f'/empresarios/empresa/{documento.empresa.id}')
