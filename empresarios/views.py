@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Empresas
+from .models import Documento, Empresas
 from django.contrib import messages
 from django.contrib.messages import constants
 
@@ -54,11 +54,46 @@ def cadastrar_empresa(request):
 def listar_empresas(request):
     if not request.user.is_authenticated:
         return redirect('/usuarios/logar')
+    
     if request.method == "GET":
         empresas = Empresas.objects.filter(user=request.user)
         return render(request, 'listar_empresas.html', {'empresas': empresas})
 
 def empresa(request, id):
     empresa = Empresas.objects.get(id=id)
+
+    if empresa.user != request.user:
+        messages.add_message(request, constants.ERROR, "Essa empresa não é sua")
+        return redirect(f'/empresarios/listar_empresas')
+        
     if request.method == "GET":
-        return render(request, 'empresa.html', {'empresa': empresa})
+        documentos = Documento.objects.filter(empresa=empresa)
+        return render(request, 'empresa.html', {'empresa': empresa, 'documentos': documentos})
+    
+def add_doc(request, id):
+    empresa = Empresas.objects.get(id=id)
+    titulo = request.POST.get('titulo')
+    arquivo = request.FILES.get('arquivo')
+    extensao = arquivo.name.split('.')
+
+    if empresa.user != request.user:
+        messages.add_message(request, constants.ERROR, "Essa empresa não é sua")
+        return redirect(f'/empresarios/listar_empresas')
+        
+
+    if extensao[1] != 'pdf':
+        messages.add_message(request, constants.ERROR, "Envie apenas PDF's")
+        return redirect(f'/empresarios/empresa/{empresa.id}')
+    
+    if not arquivo:
+        messages.add_message(request, constants.ERROR, "Envie um arquivo")
+        return redirect(f'/empresarios/empresa/{empresa.id}')
+        
+    documento = Documento(
+        empresa=empresa,
+        titulo=titulo,
+        arquivo=arquivo
+    )
+    documento.save()
+    messages.add_message(request, constants.SUCCESS, "Arquivo cadastrado com sucesso")
+    return redirect(f'/empresarios/empresa/{empresa.id}')
