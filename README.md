@@ -50,26 +50,30 @@ docker-compose down
    pip install poetry
    poetry install
    ```
+3. **Configure o ambiente virtual**
+   ```bash
+   poetry shell
+   ```
 
-3. **Configure o Banco de Dados**
+4. **Configure o Banco de Dados**
 
    Atualize as configurações de banco de dados em `core_project/settings.py`.
 
-4. **Aplique Migrações**
+5. **Aplique Migrações**
 
    ```bash
    poetry run python manage.py migrate
    ```
 
-5. **Inicie o Servidor de Desenvolvimento**
+6. **Inicie o Servidor de Desenvolvimento**
 
    ```bash
-   poetry run python manage.py runserver
+   poetry run python manage.py runserver 0.0.0.0:8000
    ```
 
-   A aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
+   A aplicação estará disponível em [http://0.0.0.0:8000](http://0.0.0.0:8000).
 
-6. **Parar o Servidor**
+7. **Parar o Servidor**
 
    Use `Ctrl + C` no terminal para parar o servidor.
 
