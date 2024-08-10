@@ -3,6 +3,8 @@ from django.shortcuts import render
 from empresarios.models import Empresas
 
 def sugestao(request):
+    if not request.user.is_authenticated:
+        return redirect('/usuarios/logar')
     areas = Empresas.area_choices
     if request.method == "GET":   
         return render(request, 'sugestao.html', {'areas': areas})
