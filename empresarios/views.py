@@ -5,6 +5,9 @@ from .models import Documento, Empresas, Metricas
 from django.contrib import messages
 from django.contrib.messages import constants
 
+from django.utils import timezone
+from datetime import timedelta
+
 def cadastrar_empresa(request):
 
     if not request.user.is_authenticated:
@@ -162,3 +165,29 @@ def gerenciar_proposta(request, id):
 
     pi.save()
     return redirect(f'/empresarios/empresa/{pi.empresa.id}')
+
+
+def dashboard(request, id):
+    empresa =  Empresas.objects.get(id=id)
+    today = timezone.now().date()
+
+    seven_days_ago = today - timedelta(days=6)
+
+    proposta_por_dia = {}
+
+    for i in range(7):
+        day = seven_days_ago + timedelta(days=i)
+
+        propostas = PropostaInvestimento.objects.filter(
+            empresa=empresa,
+            status='PA',
+            # data=day
+        )
+
+        total_dia = 0
+        
+        for proposta in propostas:
+            total_dia += proposta.valor
+
+        proposta_por_dia[day.strftime('%d/%m/%Y')] = int(total_dia)
+    return render(request, 'dashboard.html',{'labels': list(proposta_por_dia.keys()),'values': list(proposta_por_dia.values())})
