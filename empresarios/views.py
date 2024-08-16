@@ -58,8 +58,12 @@ def listar_empresas(request):
         return redirect('/usuarios/logar')
     
     if request.method == "GET":
+        nome_empresa = request.GET.get('empresa')
         empresas = Empresas.objects.filter(user=request.user)
-        return render(request, 'listar_empresas.html', {'empresas': empresas})
+
+        if nome_empresa:
+            empresas = empresas.filter(nome__icontains=nome_empresa)
+        return render(request, 'listar_empresas.html', {'empresas': empresas, 'nome_empresa':nome_empresa}, )
 
 def empresa(request, id):
     empresa = Empresas.objects.get(id=id)
