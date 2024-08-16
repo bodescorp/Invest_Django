@@ -20,6 +20,8 @@ def sugestao(request):
             empresas = Empresas.objects.filter(tempo_existencia='+5').filter(estagio="E")
         elif tipo == 'D':
             empresas = Empresas.objects.filter(tempo_existencia__in=['-6', '+6', '+1']).exclude(estagio="E")
+        elif tipo == 'G':
+            empresas = Empresas.objects.all()
         
         empresas = empresas.filter(area__in=area)
         
