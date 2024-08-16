@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
-from empresarios.models import Empresas, Documento
+from empresarios.models import Empresas, Documento, Metricas
 from investidores.models import PropostaInvestimento
 from django.http import Http404
 
@@ -47,7 +47,8 @@ def ver_empresa(request, id):
         concretizado = True
 
     percentual_disponivel = empresa.percentual_equity - percentual_vendido
-    return render(request, 'ver_empresa.html', {'empresa': empresa, 'documentos': documentos,'percentual_vendido':int(percentual_vendido), 'concretizado':concretizado,'percentual_disponivel':percentual_disponivel}) 
+    metricas = Metricas.objects.filter(empresa=empresa)
+    return render(request, 'ver_empresa.html', {'empresa': empresa, 'documentos': documentos,'percentual_vendido':int(percentual_vendido), 'concretizado':concretizado,'percentual_disponivel':percentual_disponivel, 'metricas':metricas}) 
 
 
 def realizar_proposta(request, id):
